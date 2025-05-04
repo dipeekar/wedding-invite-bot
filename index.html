@@ -150,7 +150,6 @@
   <script>
     let expectingWishMessage = false;
     let wishGiven = false;
-    let askedToSendWish = false;
     let currentStep = 0;
     let rsvpAsked = false;
     let rsvpAnswered = false;
@@ -158,14 +157,15 @@
     const suggestionSteps = [
       ['Who is the bride and groom?'],
       ['Where is the venue?'],
-      ['Can you share the Google Map of the venue?'],
-      ['Send the wishes']
+      ['Can you share the Google Map of the venue?']
     ];
 
-    const wishKeywords = ["congrats", "congratulations", "happy married life", "blessings", "best wishes", "lots of love", "good luck", "happy life", "wish you", "love you both"];
+    const wishKeywords = [
+      "congrats", "congratulations", "happy married life", "blessings", "best wishes",
+      "lots of love", "good luck", "happy life", "wish you", "love you both"
+    ];
 
     function quickQuestion(text) {
-      if (text === "Send the wishes" && expectingWishMessage) return;
       document.getElementById("userInput").value = text;
       handleUserInput(true);
     }
@@ -181,13 +181,6 @@
           suggestionBox.appendChild(btn);
         });
         currentStep++;
-      } else if (!askedToSendWish && !wishGiven) {
-        askedToSendWish = true;
-        const chatlog = document.getElementById("chatlog");
-        const askWish = document.createElement("div");
-        askWish.className = "bot-msg";
-        askWish.textContent = "Would you like to send your wishes to Deepika & Anand? 💐";
-        chatlog.appendChild(askWish);
       } else if (!rsvpAsked && !rsvpAnswered) {
         rsvpAsked = true;
         const chatlog = document.getElementById("chatlog");
@@ -195,6 +188,13 @@
         askRSVP.className = "bot-msg";
         askRSVP.textContent = "Will you be attending the wedding? 😊";
         chatlog.appendChild(askRSVP);
+      } else if (!wishGiven && !expectingWishMessage) {
+        const chatlog = document.getElementById("chatlog");
+        const askWish = document.createElement("div");
+        askWish.className = "bot-msg";
+        askWish.textContent = "Would you like to send your wishes to Deepika & Anand? 💐";
+        chatlog.appendChild(askWish);
+        expectingWishMessage = true;
       }
     }
 
@@ -213,21 +213,14 @@
       let response = "";
       const isWish = wishKeywords.some(keyword => inputLower.includes(keyword));
 
-      if (expectingWishMessage && !fromButton) {
+      if (expectingWishMessage && !fromButton && !wishGiven) {
         response = `That’s so sweet! 💌 Deepika and Anand truly appreciate your kind words: “${input}”`;
         expectingWishMessage = false;
         wishGiven = true;
-      } else if (inputLower.includes("yes") || inputLower.includes("sure") || inputLower.includes("i want to")) {
-        if (askedToSendWish && !expectingWishMessage) {
-          response = "Great! Please type your wedding wish below 💖";
-          expectingWishMessage = true;
-        } else if (!rsvpAnswered && rsvpAsked) {
-          response = "Yay! We're so happy to hear that. Can't wait to see you dance at the wedding! 💃🕺";
-          rsvpAnswered = true;
-        }
-      } else if (inputLower.includes("no") && askedToSendWish && !expectingWishMessage) {
-        response = "That's okay! You can always bless them in your heart. 💛";
-      } else if (inputLower.includes("no") && !rsvpAnswered && rsvpAsked) {
+      } else if (inputLower.includes("yes") && rsvpAsked && !rsvpAnswered) {
+        response = "Yay! We're so happy to hear that. Can't wait to see you dance at the wedding! 💃🕺";
+        rsvpAnswered = true;
+      } else if (inputLower.includes("no") && rsvpAsked && !rsvpAnswered) {
         response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
         rsvpAnswered = true;
       } else if (inputLower.includes("thanks") || inputLower.includes("thank you")) {
@@ -239,18 +232,19 @@
       } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
         response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.";
       } else if (inputLower.includes("map") || inputLower.includes("google")) {
-        response = "Sure! Here's the map location 👇\n[Open in Google Maps](https://maps.app.goo.gl/F8wM1qcQVZPAuhn76)";
+        response = `Sure! Here's the map location 👇<br><a href="https://maps.app.goo.gl/F8wM1qcQVZPAuhn76" target="_blank">Open in Google Maps</a>`;
         document.getElementById("map-container").style.display = "block";
-      } else if (isWish && !expectingWishMessage) {
+      } else if (isWish && !wishGiven) {
         response = `Aww, thank you for your lovely message! 💖 Deepika and Anand truly appreciate it.`;
         wishGiven = true;
+        expectingWishMessage = false;
       } else {
         response = "That’s a lovely message! 😊 Let me know if you want the venue, timing, or to send a wish.";
       }
 
       const botDiv = document.createElement("div");
       botDiv.className = "bot-msg";
-      botDiv.textContent = response;
+      botDiv.innerHTML = response;
       chatlog.appendChild(botDiv);
 
       inputField.value = "";
