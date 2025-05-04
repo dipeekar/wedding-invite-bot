@@ -157,7 +157,8 @@
     const suggestionSteps = [
       ['Tell me more about the bride and groom'],
       ['Where is the venue?'],
-      ['Can you share the Google Map of the venue?']
+      ['Can you share the Google Map of the venue?'],
+      ['I want to send my wishes']
     ];
 
     const wishKeywords = [
@@ -187,12 +188,6 @@
         msg.className = "bot-msg";
         msg.textContent = "Will you be attending the wedding? 😊";
         document.getElementById("chatlog").appendChild(msg);
-      } else if (!wishGiven && !expectingWishMessage) {
-        const msg = document.createElement("div");
-        msg.className = "bot-msg";
-        msg.textContent = "Would you like to send your wishes to Deepika & Anand? 💐";
-        document.getElementById("chatlog").appendChild(msg);
-        expectingWishMessage = true;
       }
     }
 
@@ -211,7 +206,7 @@
       let response = "";
       const isWish = wishKeywords.some(k => inputLower.includes(k));
 
-      if (expectingWishMessage && !fromButton && !wishGiven) {
+      if ((expectingWishMessage || inputLower.includes("wish")) && !fromButton && !wishGiven && input.length > 10) {
         response = `That’s so sweet! 💌 Deepika and Anand truly appreciate your kind words: “${input}”`;
         wishGiven = true;
         expectingWishMessage = false;
@@ -231,10 +226,10 @@
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
       } else if (inputLower.includes("bride") || inputLower.includes("groom")) {
-        response = "The bride is Deepika — graceful and cheerful. The groom is Anand — calm and kind-hearted. A perfect pair! 💑";
-      } else if (isWish && !wishGiven) {
-        response = `Aww, thank you for your lovely message! 💖 Deepika and Anand truly appreciate it.`;
-        wishGiven = true;
+        response = "The bride is Deepika — graceful and kind-hearted. The groom is Anand — cheerful and grounded. A perfect pair! 💑";
+      } else if (inputLower.includes("wish")) {
+        response = "Please type your wishes now and I’ll pass them on to the happy couple! 💖";
+        expectingWishMessage = true;
       } else {
         response = "That’s a lovely message! 😊 Let me know if you want the venue, timing, or to send a wish.";
       }
