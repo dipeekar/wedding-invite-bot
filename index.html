@@ -9,10 +9,9 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #fffaf0;
+      background: #fffaf0; /* plain background */
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      justify-content: center;
     }
 
     .chat-container {
@@ -22,7 +21,10 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      background-color: #ffffff;
+      background-image: url('floral-bg.jpg'); /* floral background only inside chat */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       border: 5px solid #ffb6c1;
       border-radius: 12px;
@@ -41,13 +43,11 @@
       flex: 1;
       padding: 16px;
       overflow-y: auto;
-      background: #fff0f5;
+      background-color: rgba(255, 255, 255, 0.8); /* semi-transparent bg over floral */
     }
 
     .user-msg, .bot-msg {
-      background-image: url('floral-bg.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
+      background: white;
       color: #000;
       padding: 10px 14px;
       border-radius: 10px;
@@ -145,7 +145,6 @@
 
   <audio id="bgMusic" autoplay loop>
     <source src="wedding_song.mp3" type="audio/mpeg" />
-    Your browser does not support the audio element.
   </audio>
 
   <script>
@@ -200,10 +199,10 @@
       chatlog.scrollTop = chatlog.scrollHeight;
     }
 
-    // Allow music to play on mobile after first click
+    // Allow music to play after first user interaction
     document.addEventListener('DOMContentLoaded', () => {
+      const music = document.getElementById('bgMusic');
       document.body.addEventListener('click', () => {
-        const music = document.getElementById('bgMusic');
         if (music && music.paused) music.play().catch(() => {});
       }, { once: true });
     });
