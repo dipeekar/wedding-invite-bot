@@ -129,7 +129,7 @@
 
     <div class="map-frame" id="map-container" style="display:none">
       <iframe
-        src="https://www.google.com/maps?q=R+R+Dussa+Events+(Garden),+Solapur&output=embed"
+        src="https://www.google.com/maps?q=D-45/2/1A, MIDC, Near Lakshmi Narayan Talkies, Bhadravathi Shopping Centre, Old Kumbhari Rd, Solapur, Maharashtra 413006&output=embed"
         width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
         referrerpolicy="no-referrer-when-downgrade">
       </iframe>
@@ -155,7 +155,7 @@
     let rsvpAnswered = false;
 
     const suggestionSteps = [
-      ['Who is the bride and groom?'],
+      ['Tell me more about the bride and groom'],
       ['Where is the venue?'],
       ['Can you share the Google Map of the venue?']
     ];
@@ -227,7 +227,7 @@
         response = "You're most welcome! 😊 Let me know if you'd like the venue or timing again.";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
-      } else if (inputLower.includes("who") || inputLower.includes("bride") || inputLower.includes("groom")) {
+      } else if (inputLower.includes("bride") || inputLower.includes("groom")) {
         response = "The bride is Deepika — graceful and cheerful. The groom is Anand — calm and kind-hearted. A perfect pair! 💑";
       } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
         response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.";
