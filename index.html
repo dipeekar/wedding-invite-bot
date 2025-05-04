@@ -23,14 +23,10 @@
       flex-direction: column;
       justify-content: space-between;
       background-color: #ffffff;
-      background-image: url('floral-bg.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      position: relative;
       border: 5px solid #ffb6c1;
       border-radius: 12px;
+      overflow: hidden;
     }
 
     .chat-header {
@@ -39,26 +35,24 @@
       padding: 16px;
       font-size: 18px;
       text-align: center;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
     }
 
     #chatlog {
       flex: 1;
       padding: 16px;
       overflow-y: auto;
-      background-color: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(2px);
+      background: #fff0f5;
     }
 
     .user-msg, .bot-msg {
       background-image: url('floral-bg.jpg');
       background-size: cover;
+      background-repeat: no-repeat;
       color: #000;
       padding: 10px 14px;
       border-radius: 10px;
       max-width: 80%;
-      margin: 6px 0;
+      margin: 8px 0;
       border: 1px solid #ccc;
     }
 
@@ -111,6 +105,12 @@
       font-size: 14px;
       cursor: pointer;
     }
+
+    .map-frame {
+      margin: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
@@ -121,6 +121,14 @@
 
     <div id="chatlog"></div>
 
+    <div class="map-frame" id="map-container" style="display:none">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.7684439420173!2d75.89945077471862!3d17.65920739613002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc5dc1ba37c2d41%3A0x5efbe6a38a6b171f!2sR%20R%20Dussa%20Events%20(Garden%20%26%20Hall)!5e0!3m2!1sen!2sin!4v1714837398000!5m2!1sen!2sin"
+        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
     <div class="suggestions">
       <button onclick="quickQuestion('When is the wedding?')">When is the wedding?</button>
       <button onclick="quickQuestion('Who is the bride and groom?')">Who is the bride and groom?</button>
@@ -130,13 +138,13 @@
     </div>
 
     <div class="input-area">
-      <input type="text" id="userInput" placeholder="Type your message...">
+      <input type="text" id="userInput" placeholder="Type your message..." />
       <button onclick="handleUserInput()">Send</button>
     </div>
   </div>
 
   <audio id="bgMusic" autoplay loop>
-    <source src="wedding_song.mp3" type="audio/mpeg">
+    <source src="wedding_song.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 
@@ -151,39 +159,40 @@
     function handleUserInput() {
       const inputField = document.getElementById("userInput");
       const input = inputField.value.trim();
-      const inputLower = input.toLowerCase();
       const chatlog = document.getElementById("chatlog");
-      let response = "";
-
+      const inputLower = input.toLowerCase();
       if (!input) return;
 
-      const userDiv = document.createElement('div');
-      userDiv.className = 'user-msg';
+      const userDiv = document.createElement("div");
+      userDiv.className = "user-msg";
       userDiv.textContent = input;
       chatlog.appendChild(userDiv);
+
+      let response = "";
 
       if (expectingWish) {
         response = `Your wish has been recorded: “${input}” 💌 Thank you for your blessings!`;
         expectingWish = false;
       } else if (/^(hi|hello|hey)/.test(inputLower)) {
         response = "Hi there! I’m your wedding assistant 😊 Ask me anything about Anand & Deepika's big day!";
-      } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time") || inputLower.includes("shubhamuhurtam")) {
+      } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
-      } else if (inputLower.includes("who") && inputLower.includes("married") || inputLower.includes("bride") || inputLower.includes("groom")) {
+      } else if (inputLower.includes("who") || inputLower.includes("bride") || inputLower.includes("groom")) {
         response = "It’s Anand and Deepika tying the knot 💍";
-      } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address") || inputLower.includes("map") || inputLower.includes("location")) {
-        response = "The wedding venue is R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.\nFull address: D-45/2/1A, MIDC, Near Lakshmi Narayan Talkies, Bhadravathi Shopping Centre, Old Kumbhari Rd, Solapur, Maharashtra 413006.";
-      } else if (inputLower.includes("congrats") || inputLower.includes("congratulations") || inputLower.includes("happy") || inputLower.includes("blessings")) {
-        response = "Aww, thank you! That means a lot 🥰";
-      } else if (inputLower.includes("wish") || inputLower.includes("bless") || inputLower.includes("message")) {
+      } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
+        response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.\nFull address: D-45/2/1A, MIDC, Near Lakshmi Narayan Talkies, Bhadravathi Shopping Centre, Old Kumbhari Rd, Solapur, Maharashtra 413006.";
+      } else if (inputLower.includes("map") || inputLower.includes("location")) {
+        response = "Sure! Here's the venue map 👇";
+        document.getElementById("map-container").style.display = "block";
+      } else if (inputLower.includes("wish") || inputLower.includes("message")) {
         response = "That’s so sweet of you! 💖 Please type your message now, and I’ll send it to Anand & Deepika!";
         expectingWish = true;
       } else {
-        response = "I’m here to help with anything about the wedding — feel free to ask about timing, location, or even send your blessings!";
+        response = "Feel free to ask anything about the wedding — like date, time, venue or to leave a wish!";
       }
 
-      const botDiv = document.createElement('div');
-      botDiv.className = 'bot-msg';
+      const botDiv = document.createElement("div");
+      botDiv.className = "bot-msg";
       botDiv.textContent = response;
       chatlog.appendChild(botDiv);
 
@@ -191,13 +200,13 @@
       chatlog.scrollTop = chatlog.scrollHeight;
     }
 
-    // Ensure music plays on load (for mobile browsers)
-    window.addEventListener('click', () => {
-      const music = document.getElementById('bgMusic');
-      if (music.paused) {
-        music.play().catch(() => {});
-      }
-    }, { once: true });
+    // Allow music to play on mobile after first click
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.addEventListener('click', () => {
+        const music = document.getElementById('bgMusic');
+        if (music && music.paused) music.play().catch(() => {});
+      }, { once: true });
+    });
   </script>
 </body>
 </html>
