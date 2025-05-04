@@ -114,10 +114,7 @@
 </head>
 <body>
   <div class="chat-container">
-    <div class="chat-header">
-      💬 Wedding Chat Assistant
-    </div>
-
+    <div class="chat-header">💬 Wedding Chat Assistant</div>
     <div id="chatlog"></div>
 
     <div class="map-frame" id="map-container" style="display:none">
@@ -141,7 +138,8 @@
   </audio>
 
   <script>
-    let expectingWish = false;
+    let expectingWishMessage = false;
+    let askedToSendWish = false;
     let currentStep = 0;
     let rsvpAsked = false;
     let rsvpAnswered = false;
@@ -149,8 +147,7 @@
     const suggestionSteps = [
       ['Who is the bride and groom?'],
       ['Where is the venue?'],
-      ['Can you share the Google Map of the venue?'],
-      ['Send the wishes']
+      ['Can you share the Google Map of the venue?']
     ];
 
     function quickQuestion(text) {
@@ -169,13 +166,20 @@
           suggestionBox.appendChild(btn);
         });
         currentStep++;
-      } else if (!rsvpAsked) {
+      } else if (!askedToSendWish) {
+        askedToSendWish = true;
         const chatlog = document.getElementById("chatlog");
-        const ask = document.createElement("div");
-        ask.className = "bot-msg";
-        ask.textContent = "Will you be attending the wedding? 😊";
-        chatlog.appendChild(ask);
+        const askWish = document.createElement("div");
+        askWish.className = "bot-msg";
+        askWish.textContent = "Would you like to send your wishes to Deepika & Anand? 💐";
+        chatlog.appendChild(askWish);
+      } else if (!rsvpAsked && !rsvpAnswered) {
         rsvpAsked = true;
+        const chatlog = document.getElementById("chatlog");
+        const askRSVP = document.createElement("div");
+        askRSVP.className = "bot-msg";
+        askRSVP.textContent = "Will you be attending the wedding? 😊";
+        chatlog.appendChild(askRSVP);
       }
     }
 
@@ -193,13 +197,25 @@
 
       let response = "";
 
-      if (expectingWish) {
-        if (inputLower.includes("congrats") || inputLower.includes("congratulations") || inputLower.includes("happy") || inputLower.includes("wish") || inputLower.includes("love") || inputLower.includes("blessing")) {
-          response = `Your wish has been recorded: “${input}” 💌 Thank you for your blessings! Deepika and Anand truly appreciate it!`;
-        } else {
-          response = "Thank you for sharing your message 🙏";
+      if (expectingWishMessage) {
+        response = `That’s so sweet! 💌 Deepika and Anand truly appreciate your kind words: “${input}”`;
+        expectingWishMessage = false;
+      } else if (inputLower.includes("yes") || inputLower.includes("sure") || inputLower.includes("i want to")) {
+        if (askedToSendWish && !expectingWishMessage) {
+          response = "Great! Please type your wedding wish below 💖";
+          expectingWishMessage = true;
+        } else if (!rsvpAnswered && rsvpAsked) {
+          response = "Yay! We're so happy to hear that. Can't wait to see you dance at the wedding! 💃🕺";
+          rsvpAnswered = true;
         }
-        expectingWish = false;
+      } else if (inputLower.includes("no") && askedToSendWish && !expectingWishMessage) {
+        response = "That's okay! You can always bless them in your heart. 💛";
+        expectingWishMessage = false;
+      } else if (inputLower.includes("no") && !rsvpAnswered && rsvpAsked) {
+        response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
+        rsvpAnswered = true;
+      } else if (inputLower.includes("thanks") || inputLower.includes("thank you")) {
+        response = "You're most welcome! 😊 Feel free to ask anything about the wedding.";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
       } else if (inputLower.includes("who") || inputLower.includes("bride") || inputLower.includes("groom")) {
@@ -209,17 +225,8 @@
       } else if (inputLower.includes("map") || inputLower.includes("google")) {
         response = "Sure! Here's the Google Map of the venue 👇";
         document.getElementById("map-container").style.display = "block";
-      } else if (inputLower.includes("wish") || inputLower.includes("message")) {
-        response = "We’d love to hear your message 💖 Please type your wedding wish below.";
-        expectingWish = true;
-      } else if (!rsvpAnswered && inputLower.includes("yes")) {
-        response = "That’s wonderful to hear! Can’t wait to see you there — hope you bring your best dance moves! 💃🕺";
-        rsvpAnswered = true;
-      } else if (!rsvpAnswered && inputLower.includes("no")) {
-        response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
-        rsvpAnswered = true;
       } else {
-        response = "I'm not sure how to help with that. You can ask things like 'Where is the venue?' or 'Send the wishes'. 😊";
+        response = "I'm here to help with wedding details or take your wishes. 😊";
       }
 
       const botDiv = document.createElement("div");
@@ -230,7 +237,7 @@
       inputField.value = "";
       chatlog.scrollTop = chatlog.scrollHeight;
 
-      if (!expectingWish && !rsvpAnswered) updateSuggestions();
+      if (!expectingWishMessage && !rsvpAnswered) updateSuggestions();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -246,7 +253,7 @@
         followUp.textContent = "You can ask about the wedding or tap a suggestion below to begin.";
         chatlog.appendChild(followUp);
         updateSuggestions();
-      }, 2000);
+      }, 1500);
 
       const music = document.getElementById('bgMusic');
       document.body.addEventListener('click', () => {
