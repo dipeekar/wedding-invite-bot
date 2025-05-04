@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,131 +12,137 @@
       background-color: #fffaf0;
       display: flex;
       justify-content: center;
-    }.chat-container {
-  width: 100%;
-  max-width: 480px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-image: url('floral-bg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  border: 5px solid #ffb6c1;
-  border-radius: 12px;
-  overflow: hidden;
-}
+    }
 
-.chat-header {
-  background-color: #d6336c;
-  color: white;
-  padding: 16px;
-  font-size: 18px;
-  text-align: center;
-}
+    .chat-container {
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-image: url('floral-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      border: 5px solid #ffb6c1;
+      border-radius: 12px;
+      overflow: hidden;
+    }
 
-#chatlog {
-  flex: 1;
-  padding: 16px;
-  overflow-y: auto;
-}
+    .chat-header {
+      background-color: #d6336c;
+      color: white;
+      padding: 16px;
+      font-size: 18px;
+      text-align: center;
+    }
 
-.user-msg, .bot-msg {
-  background: rgba(255, 255, 255, 0.9);
-  color: #000;
-  padding: 10px 14px;
-  border-radius: 10px;
-  max-width: 80%;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-}
+    #chatlog {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
 
-.user-msg {
-  margin-left: auto;
-  text-align: right;
-}
+    .user-msg, .bot-msg {
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      max-width: 80%;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+    }
 
-.bot-msg {
-  margin-right: auto;
-  text-align: left;
-}
+    .user-msg {
+      margin-left: auto;
+      text-align: right;
+    }
 
-.input-area {
-  display: flex;
-  padding: 10px;
-  background-color: #f0f0f0;
-}
+    .bot-msg {
+      margin-right: auto;
+      text-align: left;
+    }
 
-.input-area input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+    .input-area {
+      display: flex;
+      padding: 10px;
+      background-color: #f0f0f0;
+    }
 
-.input-area button {
-  margin-left: 8px;
-  padding: 10px 15px;
-  background-color: #25d366;
-  color: white;
-  border: none;
-  border-radius: 5px;
-}
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
-.suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 10px;
-  background: #ffe4e1;
-  justify-content: center;
-}
+    .input-area button {
+      margin-left: 8px;
+      padding: 10px 15px;
+      background-color: #25d366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
 
-.suggestions button {
-  background-color: #ffb6c1;
-  border: none;
-  border-radius: 20px;
-  padding: 6px 12px;
-  font-size: 14px;
-  cursor: pointer;
-}
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      background: #ffe4e1;
+      justify-content: center;
+    }
 
-.map-frame {
-  margin: 10px;
-  border-radius: 12px;
-  overflow: hidden;
-}
+    .suggestions button {
+      background-color: #ffb6c1;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
 
+    .map-frame {
+      margin: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
   <div class="chat-container">
     <div class="chat-header">
       💬 Wedding Chat Assistant
-    </div><div id="chatlog"></div>
+    </div>
 
-<div class="map-frame" id="map-container" style="display:none">
-  <iframe
-    src="https://www.google.com/maps?q=R+R+Dussa+Events+(Garden),+Solapur&output=embed"
-    width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade">
-  </iframe>
-</div>
+    <div id="chatlog"></div>
 
-<div class="suggestions" id="suggestions">
-  <button onclick="quickQuestion('When is the wedding?')">When is the wedding?</button>
-</div>
+    <div class="map-frame" id="map-container" style="display:none">
+      <iframe
+        src="https://www.google.com/maps?q=R+R+Dussa+Events+(Garden),+Solapur&output=embed"
+        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
 
-<div class="input-area">
-  <input type="text" id="userInput" placeholder="Type your message..." />
-  <button onclick="handleUserInput()">Send</button>
-</div>
+    <div class="suggestions" id="suggestions">
+      <button onclick="quickQuestion('When is the wedding?')">When is the wedding?</button>
+    </div>
 
-  </div>  <audio id="bgMusic" autoplay loop>
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="handleUserInput()">Send</button>
+    </div>
+  </div>
+
+  <audio id="bgMusic" autoplay loop>
     <source src="wedding_song.mp3" type="audio/mpeg" />
-  </audio>  <script>
+  </audio>
+
+  <script>
     let expectingWish = false;
     let currentStep = 0;
 
@@ -225,5 +232,6 @@
         if (music && music.paused) music.play().catch(() => {});
       }, { once: true });
     });
-  </script></body>
+  </script>
+</body>
 </html>
