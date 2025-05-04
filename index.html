@@ -172,20 +172,20 @@
         response = `Your wish has been recorded: “${input}” 💌 Thank you for your blessings!`;
         expectingWish = false;
       } else if (inputLower.includes("congrats") || inputLower.includes("congratulations") || inputLower.includes("happy married") || inputLower.includes("blessing") || inputLower.includes("love") || inputLower.includes("wish")) {
-        response = "Aww, thank you for your lovely wishes! 💕 Anand & Deepika appreciate it!";
+        response = "Aww, thank you for your lovely wishes! 💕 Deepika and Anand appreciate it!";
       } else if (/(hi|hello|hey|namaste)/.test(inputLower)) {
         response = "Hi there! I’m your wedding assistant 😊 Ask anything about Anand & Deepika's big day!";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
       } else if (inputLower.includes("who") || inputLower.includes("bride") || inputLower.includes("groom")) {
-        response = "It’s Anand and Deepika tying the knot 💍";
+        response = "It’s Deepikaand Anand tying the knot 💍";
       } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
         response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.\nFull address: D-45/2/1A, MIDC, Near Lakshmi Narayan Talkies, Bhadravathi Shopping Centre, Old Kumbhari Rd, Solapur, Maharashtra 413006.";
       } else if (inputLower.includes("map") || inputLower.includes("location")) {
         response = "Sure! Here's the venue map 👇";
         document.getElementById("map-container").style.display = "block";
       } else if (inputLower.includes("wish") || inputLower.includes("message")) {
-        response = "That’s so sweet of you! 💖 Please type your message now, and I’ll send it to Anand & Deepika!";
+        response = "That’s so sweet of you! 💖 Please type your message now, and I’ll send it to Deepika and Anand!";
         expectingWish = true;
       } else {
         response = "I'm not sure how to answer that. Please contact Deepika for more details. 😊";
