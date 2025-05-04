@@ -128,9 +128,7 @@
       </iframe>
     </div>
 
-    <div class="suggestions" id="suggestions">
-      <button onclick="quickQuestion('When is the wedding?')">When is the wedding?</button>
-    </div>
+    <div class="suggestions" id="suggestions"></div>
 
     <div class="input-area">
       <input type="text" id="userInput" placeholder="Type your message..." />
@@ -149,7 +147,8 @@
     const suggestionSteps = [
       ['Who is the bride and groom?'],
       ['Where is the venue?'],
-      ['Can you share the Google Map of the venue?']
+      ['Can you share the Google Map of the venue?'],
+      ['Send the wishes']
     ];
 
     function quickQuestion(text) {
@@ -168,6 +167,13 @@
           suggestionBox.appendChild(btn);
         });
         currentStep++;
+      } else {
+        // Ask if attending
+        const chatlog = document.getElementById("chatlog");
+        const ask = document.createElement("div");
+        ask.className = "bot-msg";
+        ask.textContent = "Will you be attending the wedding? 😊";
+        chatlog.appendChild(ask);
       }
     }
 
@@ -189,30 +195,27 @@
         if (inputLower.includes("congrats") || inputLower.includes("congratulations") || inputLower.includes("happy") || inputLower.includes("wish") || inputLower.includes("love") || inputLower.includes("blessing")) {
           response = `Your wish has been recorded: “${input}” 💌 Thank you for your blessings! Deepika and Anand truly appreciate it!`;
         } else {
-          response = "Thanks for sharing! 🙏";
+          response = "Thank you for sharing your message 🙏";
         }
         expectingWish = false;
-      } else if (/(hi|hello|hey|namaste)/.test(inputLower)) {
-        response = "Hi there! I’m your wedding assistant 😊 Ask me anything about the big day!";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
       } else if (inputLower.includes("who") || inputLower.includes("bride") || inputLower.includes("groom")) {
         response = "The bride is Deepika — graceful and cheerful. The groom is Anand — calm and kind-hearted. A perfect pair! 💑";
       } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
-        response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.\nFull address: D-45/2/1A, MIDC, Near Lakshmi Narayan Talkies, Bhadravathi Shopping Centre, Old Kumbhari Rd, Solapur, Maharashtra 413006.";
+        response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.";
       } else if (inputLower.includes("map") || inputLower.includes("google")) {
         response = "Sure! Here's the Google Map of the venue 👇";
         document.getElementById("map-container").style.display = "block";
       } else if (inputLower.includes("wish") || inputLower.includes("message")) {
         response = "We’d love to hear your message 💖 Please type your wedding wish below.";
         expectingWish = true;
-        currentStep = suggestionSteps.length;
-      } else if (currentStep >= suggestionSteps.length && inputLower.includes("yes")) {
+      } else if (inputLower.includes("yes")) {
         response = "That’s wonderful to hear! Can’t wait to see you there — hope you bring your best dance moves! 💃🕺";
-      } else if (currentStep >= suggestionSteps.length && inputLower.includes("no")) {
+      } else if (inputLower.includes("no")) {
         response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
       } else {
-        response = "I'm not sure how to help with that. You can ask something like ‘Can you share the Google Map of the venue?’ or ‘Send the wishes’, or you can contact Deepika for more details. 😊";
+        response = "I'm not sure how to help with that. You can ask things like 'Where is the venue?' or 'Send the wishes'. 😊";
       }
 
       const botDiv = document.createElement("div");
@@ -222,6 +225,7 @@
 
       inputField.value = "";
       chatlog.scrollTop = chatlog.scrollHeight;
+
       if (!expectingWish) updateSuggestions();
     }
 
@@ -231,7 +235,14 @@
       greeting.className = "bot-msg";
       greeting.textContent = "Namaskaar 🙏 Welcome to Deepika & Anand's Wedding Chat! Let's celebrate this beautiful journey together.";
       chatlog.appendChild(greeting);
-      updateSuggestions();
+
+      setTimeout(() => {
+        const followUp = document.createElement("div");
+        followUp.className = "bot-msg";
+        followUp.textContent = "You can ask about the wedding or tap a suggestion below to begin.";
+        chatlog.appendChild(followUp);
+        updateSuggestions();
+      }, 2000);
 
       const music = document.getElementById('bgMusic');
       document.body.addEventListener('click', () => {
