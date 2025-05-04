@@ -39,6 +39,15 @@
       text-align: center;
     }
 
+    .countdown {
+      text-align: center;
+      background-color: #ffe4e1;
+      color: #b30059;
+      font-weight: bold;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
     #chatlog {
       flex: 1;
       padding: 16px;
@@ -115,6 +124,7 @@
 <body>
   <div class="chat-container">
     <div class="chat-header">💬 Wedding Chat Assistant</div>
+    <div class="countdown" id="countdownTimer">⏳ Countdown: Loading...</div>
     <div id="chatlog"></div>
 
     <div class="map-frame" id="map-container" style="display:none">
@@ -147,10 +157,14 @@
     const suggestionSteps = [
       ['Who is the bride and groom?'],
       ['Where is the venue?'],
-      ['Can you share the Google Map of the venue?']
+      ['Can you share the Google Map of the venue?'],
+      ['Send the wishes']
     ];
 
+    const wishKeywords = ["congrats", "congratulations", "happy married life", "blessings", "best wishes", "lots of love", "good luck", "happy life", "wish you", "love you both"];
+
     function quickQuestion(text) {
+      if (text === "Send the wishes" && expectingWishMessage) return;
       document.getElementById("userInput").value = text;
       handleUserInput();
     }
@@ -197,6 +211,8 @@
 
       let response = "";
 
+      const isWish = wishKeywords.some(keyword => inputLower.includes(keyword));
+
       if (expectingWishMessage) {
         response = `That’s so sweet! 💌 Deepika and Anand truly appreciate your kind words: “${input}”`;
         expectingWishMessage = false;
@@ -210,12 +226,11 @@
         }
       } else if (inputLower.includes("no") && askedToSendWish && !expectingWishMessage) {
         response = "That's okay! You can always bless them in your heart. 💛";
-        expectingWishMessage = false;
       } else if (inputLower.includes("no") && !rsvpAnswered && rsvpAsked) {
         response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
         rsvpAnswered = true;
       } else if (inputLower.includes("thanks") || inputLower.includes("thank you")) {
-        response = "You're most welcome! 😊 Feel free to ask anything about the wedding.";
+        response = "You're most welcome! 😊 Let me know if you'd like the venue or timing again.";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
       } else if (inputLower.includes("who") || inputLower.includes("bride") || inputLower.includes("groom")) {
@@ -225,8 +240,10 @@
       } else if (inputLower.includes("map") || inputLower.includes("google")) {
         response = "Sure! Here's the Google Map of the venue 👇";
         document.getElementById("map-container").style.display = "block";
+      } else if (isWish) {
+        response = `Aww, thank you for your lovely message! 💖 Deepika and Anand truly appreciate it.`;
       } else {
-        response = "I'm here to help with wedding details or take your wishes. 😊";
+        response = "That’s a lovely message! 😊 Let me know if you want the venue, timing, or to send a wish.";
       }
 
       const botDiv = document.createElement("div");
@@ -238,6 +255,30 @@
       chatlog.scrollTop = chatlog.scrollHeight;
 
       if (!expectingWishMessage && !rsvpAnswered) updateSuggestions();
+    }
+
+    function startCountdown(targetDate) {
+      const countdownEl = document.getElementById("countdownTimer");
+
+      function updateCountdown() {
+        const now = new Date();
+        const distance = targetDate - now;
+
+        if (distance <= 0) {
+          countdownEl.textContent = "🎊 It's the wedding day! Celebrate love!";
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((distance / (1000 * 60)) % 60);
+        const seconds = Math.floor((distance / 1000) % 60);
+
+        countdownEl.textContent = `⏳ Countdown: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -259,6 +300,8 @@
       document.body.addEventListener('click', () => {
         if (music && music.paused) music.play().catch(() => {});
       }, { once: true });
+
+      startCountdown(new Date("2025-05-14T10:58:00"));
     });
   </script>
 </body>
