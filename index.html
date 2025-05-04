@@ -149,7 +149,7 @@
     const suggestionSteps = [
       ['Who is the bride and groom?'],
       ['Where is the venue?'],
-      ['Send me the map'],
+      ['Can you share the Google Map of the venue?'],
       ['Send the wishes'],
       ['Will you be attending the wedding?']
     ];
@@ -188,32 +188,34 @@
       let response = "";
 
       if (expectingWish) {
-        response = `Your wish has been recorded: “${input}” 💌 Thank you for your blessings! Deepika and Anand truly appreciate it!`;
+        if (inputLower.includes("congrats") || inputLower.includes("congratulations") || inputLower.includes("happy") || inputLower.includes("wish") || inputLower.includes("love") || inputLower.includes("blessing")) {
+          response = `Your wish has been recorded: “${input}” 💌 Thank you for your blessings! Deepika and Anand truly appreciate it!`;
+        } else {
+          response = "Thanks for sharing! 🙏";
+        }
         expectingWish = false;
-      } else if (inputLower.includes("congrats") || inputLower.includes("congratulations") || inputLower.includes("happy married") || inputLower.includes("blessing") || inputLower.includes("love") || inputLower.includes("wish")) {
-        response = "Aww, thank you for your lovely wishes! 💕 Deepika and Anand appreciate it!";
       } else if (/(hi|hello|hey|namaste)/.test(inputLower)) {
-        response = "Hi there! I’m your wedding assistant 😊 Ask anything about Deepika & Anand's big day!";
+        response = "Hi there! I’m your wedding assistant 😊 Ask me anything about the big day!";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
       } else if (inputLower.includes("who") || inputLower.includes("bride") || inputLower.includes("groom")) {
         response = "The bride is Deepika — graceful and cheerful. The groom is Anand — calm and kind-hearted. A perfect pair! 💑";
       } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
         response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.\nFull address: D-45/2/1A, MIDC, Near Lakshmi Narayan Talkies, Bhadravathi Shopping Centre, Old Kumbhari Rd, Solapur, Maharashtra 413006.";
-      } else if (inputLower.includes("map") || inputLower.includes("location")) {
-        response = "Sure! Here's the venue map 👇";
+      } else if (inputLower.includes("map") || inputLower.includes("google")) {
+        response = "Sure! Here's the Google Map of the venue 👇";
         document.getElementById("map-container").style.display = "block";
-      } else if (inputLower.includes("wish")) {
-        response = "That’s so sweet of you! 💖 Please type your message now to send your wishes to Deepika and Anand.";
+      } else if (inputLower.includes("wish") || inputLower.includes("message")) {
+        response = "We’d love to hear from you 💖 Please type your wedding wish below.";
         expectingWish = true;
-      } else if (inputLower.includes("attending") || inputLower.includes("join") || inputLower.includes("coming") || inputLower.includes("will come") || inputLower.includes("can’t") || inputLower.includes("cannot")) {
+      } else if (inputLower.includes("attending") || inputLower.includes("join") || inputLower.includes("coming") || inputLower.includes("will come")) {
         if (inputLower.includes("yes") || inputLower.includes("sure") || inputLower.includes("i will")) {
-          response = "Yay! We would love to see you dance at the wedding! See you there! 💃🕺";
+          response = "That’s wonderful to hear! Can’t wait to see you there — hope you bring your best dance moves! 💃🕺";
         } else {
-          response = "That’s okay! We’ll miss you. Wishing you the best! 😔";
+          response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
         }
       } else {
-        response = "I'm not sure how to help with that. You can ask things like ‘Send the venue map’ or ‘Send the wishes’, or contact Deepika for other details. 😊";
+        response = "I'm not sure how to help with that. You can ask something like ‘Can you share the Google Map of the venue?’ or ‘Send the wishes’, or you can contact Deepika for more details. 😊";
       }
 
       const botDiv = document.createElement("div");
