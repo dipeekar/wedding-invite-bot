@@ -4,24 +4,102 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anand & Deepika's Wedding</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #e5ddd5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .chat-header {
+      background-color: #075e54;
+      color: white;
+      padding: 16px;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    #chatlog {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background: #dcf8c6;
+    }
+
+    #chatlog div {
+      margin-bottom: 10px;
+    }
+
+    .user-msg {
+      background-color: #dcf8c6;
+      padding: 8px 12px;
+      border-radius: 10px;
+      max-width: 80%;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .bot-msg {
+      background-color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      max-width: 80%;
+      margin-right: auto;
+      text-align: left;
+      border: 1px solid #ccc;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 10px;
+      background-color: #f0f0f0;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .input-area button {
+      margin-left: 8px;
+      padding: 10px 15px;
+      background-color: #25d366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-  <div class="card-container">
-    <img src="wedding_card.jpg" alt="Wedding Card" class="wedding-card">
-  </div>
+  <div class="chat-container">
+    <div class="chat-header">
+      💬 Anand & Deepika Wedding Bot
+    </div>
 
-  <div class="chatbox">
     <div id="chatlog"></div>
-    <input type="text" id="userInput" placeholder="Ask something...">
-    <button onclick="handleUserInput()">Send</button>
-  </div>
 
-  <div class="map">
-    <iframe
-      src="https://www.google.com/maps?q=R+R+Dussa+Events+(Garden),+Solapur&output=embed"
-      width="100%" height="300" style="border:0;" allowfullscreen=""
-      loading="lazy"></iframe>
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type your message...">
+      <button onclick="handleUserInput()">Send</button>
+    </div>
   </div>
 
   <audio autoplay loop>
@@ -39,16 +117,17 @@
       const chatlog = document.getElementById("chatlog");
       let response = "";
 
+      if (!input) return;
+
+      const userDiv = document.createElement('div');
+      userDiv.className = 'user-msg';
+      userDiv.textContent = input;
+      chatlog.appendChild(userDiv);
+
       if (expectingWish) {
         response = `Your wish has been recorded: “${input}” 💌 Thank you for your blessings!`;
         expectingWish = false;
-        chatlog.innerHTML += `<div><b>You:</b> ${input}</div>`;
-        chatlog.innerHTML += `<div><b>Bot:</b> ${response}</div>`;
-        inputField.value = "";
-        return;
-      }
-
-      if (/^(hi|hello|hey)/.test(inputLower)) {
+      } else if (/^(hi|hello|hey)/.test(inputLower)) {
         response = "Hi there! I’m your wedding assistant 😊 Ask me anything about Anand & Deepika's big day!";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time") || inputLower.includes("shubhamuhurtam")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
@@ -57,7 +136,7 @@
       } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
         response = "The wedding venue is R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.";
       } else if (inputLower.includes("map") || inputLower.includes("location") || inputLower.includes("send me") || inputLower.includes("share")) {
-        response = "Of course! You’ll find the map just below 👇";
+        response = "Sure! Here is the location: https://goo.gl/maps/j4BQRDjgzUjDF9UC7";
       } else if (inputLower.includes("congrats") || inputLower.includes("congratulations") || inputLower.includes("happy") || inputLower.includes("blessings")) {
         response = "Aww, thank you! That means a lot 🥰";
       } else if (inputLower.includes("wish") || inputLower.includes("bless") || inputLower.includes("message")) {
@@ -67,9 +146,13 @@
         response = "I’m here to help with anything about the wedding — feel free to ask about timing, location, or even send your blessings!";
       }
 
-      chatlog.innerHTML += `<div><b>You:</b> ${input}</div>`;
-      chatlog.innerHTML += `<div><b>Bot:</b> ${response}</div>`;
+      const botDiv = document.createElement('div');
+      botDiv.className = 'bot-msg';
+      botDiv.textContent = response;
+      chatlog.appendChild(botDiv);
+
       inputField.value = "";
+      chatlog.scrollTop = chatlog.scrollHeight;
     }
   </script>
 </body>
