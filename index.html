@@ -149,6 +149,7 @@
 
   <script>
     let expectingWishMessage = false;
+    let wishGiven = false;
     let askedToSendWish = false;
     let currentStep = 0;
     let rsvpAsked = false;
@@ -166,7 +167,7 @@
     function quickQuestion(text) {
       if (text === "Send the wishes" && expectingWishMessage) return;
       document.getElementById("userInput").value = text;
-      handleUserInput();
+      handleUserInput(true);
     }
 
     function updateSuggestions() {
@@ -180,7 +181,7 @@
           suggestionBox.appendChild(btn);
         });
         currentStep++;
-      } else if (!askedToSendWish) {
+      } else if (!askedToSendWish && !wishGiven) {
         askedToSendWish = true;
         const chatlog = document.getElementById("chatlog");
         const askWish = document.createElement("div");
@@ -197,7 +198,7 @@
       }
     }
 
-    function handleUserInput() {
+    function handleUserInput(fromButton = false) {
       const inputField = document.getElementById("userInput");
       const input = inputField.value.trim();
       const chatlog = document.getElementById("chatlog");
@@ -210,12 +211,12 @@
       chatlog.appendChild(userDiv);
 
       let response = "";
-
       const isWish = wishKeywords.some(keyword => inputLower.includes(keyword));
 
-      if (expectingWishMessage) {
+      if (expectingWishMessage && !fromButton) {
         response = `That’s so sweet! 💌 Deepika and Anand truly appreciate your kind words: “${input}”`;
         expectingWishMessage = false;
+        wishGiven = true;
       } else if (inputLower.includes("yes") || inputLower.includes("sure") || inputLower.includes("i want to")) {
         if (askedToSendWish && !expectingWishMessage) {
           response = "Great! Please type your wedding wish below 💖";
@@ -238,10 +239,11 @@
       } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
         response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.";
       } else if (inputLower.includes("map") || inputLower.includes("google")) {
-        response = "Sure! Here's the Google Map of the venue 👇";
+        response = "Sure! Here's the map location 👇\n[Open in Google Maps](https://maps.app.goo.gl/F8wM1qcQVZPAuhn76)";
         document.getElementById("map-container").style.display = "block";
-      } else if (isWish) {
+      } else if (isWish && !expectingWishMessage) {
         response = `Aww, thank you for your lovely message! 💖 Deepika and Anand truly appreciate it.`;
+        wishGiven = true;
       } else {
         response = "That’s a lovely message! 😊 Let me know if you want the venue, timing, or to send a wish.";
       }
