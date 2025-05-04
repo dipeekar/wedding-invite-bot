@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Deepika & Anand's Wedding</title>
+  <title>Anand & Deepika's Wedding</title>
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #fffaf0; /* plain background */
+      background-color: #fffaf0;
       display: flex;
       justify-content: center;
     }
@@ -21,7 +21,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      background-image: url('floral-bg.jpg'); /* floral background only inside chat */
+      background-image: url('floral-bg.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -43,11 +43,10 @@
       flex: 1;
       padding: 16px;
       overflow-y: auto;
-      background-color: rgba(255, 255, 255, 0.8); /* semi-transparent bg over floral */
     }
 
     .user-msg, .bot-msg {
-      background: white;
+      background: rgba(255, 255, 255, 0.9);
       color: #000;
       padding: 10px 14px;
       border-radius: 10px;
@@ -172,8 +171,10 @@
       if (expectingWish) {
         response = `Your wish has been recorded: “${input}” 💌 Thank you for your blessings!`;
         expectingWish = false;
-      } else if (/^(hi|hello|hey)/.test(inputLower)) {
-        response = "Hi there! I’m your wedding assistant 😊 Ask me anything about Anand & Deepika's big day!";
+      } else if (inputLower.includes("congrats") || inputLower.includes("congratulations") || inputLower.includes("happy married") || inputLower.includes("blessing") || inputLower.includes("love") || inputLower.includes("wish")) {
+        response = "Aww, thank you for your lovely wishes! 💕 Anand & Deepika appreciate it!";
+      } else if (/(hi|hello|hey|namaste)/.test(inputLower)) {
+        response = "Hi there! I’m your wedding assistant 😊 Ask anything about Anand & Deepika's big day!";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
       } else if (inputLower.includes("who") || inputLower.includes("bride") || inputLower.includes("groom")) {
@@ -187,7 +188,7 @@
         response = "That’s so sweet of you! 💖 Please type your message now, and I’ll send it to Anand & Deepika!";
         expectingWish = true;
       } else {
-        response = "Feel free to ask anything about the wedding — like date, time, venue or to leave a wish!";
+        response = "I'm not sure how to answer that. Please contact Deepika for more details. 😊";
       }
 
       const botDiv = document.createElement("div");
@@ -199,7 +200,6 @@
       chatlog.scrollTop = chatlog.scrollHeight;
     }
 
-    // Allow music to play after first user interaction
     document.addEventListener('DOMContentLoaded', () => {
       const music = document.getElementById('bgMusic');
       document.body.addEventListener('click', () => {
