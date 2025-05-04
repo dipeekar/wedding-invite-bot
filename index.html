@@ -143,6 +143,8 @@
   <script>
     let expectingWish = false;
     let currentStep = 0;
+    let rsvpAsked = false;
+    let rsvpAnswered = false;
 
     const suggestionSteps = [
       ['Who is the bride and groom?'],
@@ -167,12 +169,13 @@
           suggestionBox.appendChild(btn);
         });
         currentStep++;
-      } else {
+      } else if (!rsvpAsked) {
         const chatlog = document.getElementById("chatlog");
         const ask = document.createElement("div");
         ask.className = "bot-msg";
         ask.textContent = "Will you be attending the wedding? 😊";
         chatlog.appendChild(ask);
+        rsvpAsked = true;
       }
     }
 
@@ -209,10 +212,12 @@
       } else if (inputLower.includes("wish") || inputLower.includes("message")) {
         response = "We’d love to hear your message 💖 Please type your wedding wish below.";
         expectingWish = true;
-      } else if (inputLower.includes("yes")) {
+      } else if (!rsvpAnswered && inputLower.includes("yes")) {
         response = "That’s wonderful to hear! Can’t wait to see you there — hope you bring your best dance moves! 💃🕺";
-      } else if (inputLower.includes("no")) {
+        rsvpAnswered = true;
+      } else if (!rsvpAnswered && inputLower.includes("no")) {
         response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
+        rsvpAnswered = true;
       } else {
         response = "I'm not sure how to help with that. You can ask things like 'Where is the venue?' or 'Send the wishes'. 😊";
       }
@@ -225,14 +230,14 @@
       inputField.value = "";
       chatlog.scrollTop = chatlog.scrollHeight;
 
-      if (!expectingWish) updateSuggestions();
+      if (!expectingWish && !rsvpAnswered) updateSuggestions();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       const chatlog = document.getElementById("chatlog");
       const greeting = document.createElement("div");
       greeting.className = "bot-msg";
-      greeting.textContent = "Welcome 🙏 Let’s make Deepika & Anand’s big day even more special together!";
+      greeting.textContent = "Welcome! 🎊 You’re invited to celebrate the wedding of Deepika & Anand. I’m here to help with all the details!";
       chatlog.appendChild(greeting);
 
       setTimeout(() => {
