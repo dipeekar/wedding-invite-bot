@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anand & Deepika's Wedding</title>
+  <title>Deepika and Anand's Wedding</title>
   <style>
     body {
       margin: 0;
@@ -12,146 +11,159 @@
       background-color: #fffaf0;
       display: flex;
       justify-content: center;
-    }
+    }.chat-container {
+  width: 100%;
+  max-width: 480px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-image: url('floral-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  border: 5px solid #ffb6c1;
+  border-radius: 12px;
+  overflow: hidden;
+}
 
-    .chat-container {
-      width: 100%;
-      max-width: 480px;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background-image: url('floral-bg.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      border: 5px solid #ffb6c1;
-      border-radius: 12px;
-      overflow: hidden;
-    }
+.chat-header {
+  background-color: #d6336c;
+  color: white;
+  padding: 16px;
+  font-size: 18px;
+  text-align: center;
+}
 
-    .chat-header {
-      background-color: #d6336c;
-      color: white;
-      padding: 16px;
-      font-size: 18px;
-      text-align: center;
-    }
+#chatlog {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
 
-    #chatlog {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-    }
+.user-msg, .bot-msg {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  padding: 10px 14px;
+  border-radius: 10px;
+  max-width: 80%;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+}
 
-    .user-msg, .bot-msg {
-      background: rgba(255, 255, 255, 0.9);
-      color: #000;
-      padding: 10px 14px;
-      border-radius: 10px;
-      max-width: 80%;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-    }
+.user-msg {
+  margin-left: auto;
+  text-align: right;
+}
 
-    .user-msg {
-      margin-left: auto;
-      text-align: right;
-    }
+.bot-msg {
+  margin-right: auto;
+  text-align: left;
+}
 
-    .bot-msg {
-      margin-right: auto;
-      text-align: left;
-    }
+.input-area {
+  display: flex;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
 
-    .input-area {
-      display: flex;
-      padding: 10px;
-      background-color: #f0f0f0;
-    }
+.input-area input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
-    .input-area input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+.input-area button {
+  margin-left: 8px;
+  padding: 10px 15px;
+  background-color: #25d366;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
 
-    .input-area button {
-      margin-left: 8px;
-      padding: 10px 15px;
-      background-color: #25d366;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  background: #ffe4e1;
+  justify-content: center;
+}
 
-    .suggestions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 10px;
-      background: #ffe4e1;
-      justify-content: center;
-    }
+.suggestions button {
+  background-color: #ffb6c1;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
 
-    .suggestions button {
-      background-color: #ffb6c1;
-      border: none;
-      border-radius: 20px;
-      padding: 6px 12px;
-      font-size: 14px;
-      cursor: pointer;
-    }
+.map-frame {
+  margin: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+}
 
-    .map-frame {
-      margin: 10px;
-      border-radius: 12px;
-      overflow: hidden;
-    }
   </style>
 </head>
 <body>
   <div class="chat-container">
     <div class="chat-header">
-      💬 Anand & Deepika Wedding Bot
-    </div>
+      💬 Wedding Chat Assistant
+    </div><div id="chatlog"></div>
 
-    <div id="chatlog"></div>
+<div class="map-frame" id="map-container" style="display:none">
+  <iframe
+    src="https://www.google.com/maps?q=R+R+Dussa+Events+(Garden),+Solapur&output=embed"
+    width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+</div>
 
-    <div class="map-frame" id="map-container" style="display:none">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.7684439420173!2d75.89945077471862!3d17.65920739613002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc5dc1ba37c2d41%3A0x5efbe6a38a6b171f!2sR%20R%20Dussa%20Events%20(Garden%20%26%20Hall)!5e0!3m2!1sen!2sin!4v1714837398000!5m2!1sen!2sin"
-        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-    </div>
+<div class="suggestions" id="suggestions">
+  <button onclick="quickQuestion('When is the wedding?')">When is the wedding?</button>
+</div>
 
-    <div class="suggestions">
-      <button onclick="quickQuestion('When is the wedding?')">When is the wedding?</button>
-      <button onclick="quickQuestion('Who is the bride and groom?')">Who is the bride and groom?</button>
-      <button onclick="quickQuestion('Where is the venue?')">Where is the venue?</button>
-      <button onclick="quickQuestion('Send me the map')">Send me the map</button>
-      <button onclick="quickQuestion('I want to wish')">I want to wish</button>
-    </div>
+<div class="input-area">
+  <input type="text" id="userInput" placeholder="Type your message..." />
+  <button onclick="handleUserInput()">Send</button>
+</div>
 
-    <div class="input-area">
-      <input type="text" id="userInput" placeholder="Type your message..." />
-      <button onclick="handleUserInput()">Send</button>
-    </div>
-  </div>
-
-  <audio id="bgMusic" autoplay loop>
+  </div>  <audio id="bgMusic" autoplay loop>
     <source src="wedding_song.mp3" type="audio/mpeg" />
-  </audio>
-
-  <script>
+  </audio>  <script>
     let expectingWish = false;
+    let currentStep = 0;
+
+    const suggestionSteps = [
+      ['Who is the bride and groom?'],
+      ['Where is the venue?'],
+      ['Send me the map'],
+      ['Send the wishes'],
+      ['Will you be attending the wedding?']
+    ];
 
     function quickQuestion(text) {
       document.getElementById("userInput").value = text;
       handleUserInput();
+    }
+
+    function updateSuggestions() {
+      const suggestionBox = document.getElementById("suggestions");
+      suggestionBox.innerHTML = "";
+      if (currentStep < suggestionSteps.length) {
+        suggestionSteps[currentStep].forEach(q => {
+          const btn = document.createElement("button");
+          btn.innerText = q;
+          btn.onclick = () => quickQuestion(q);
+          suggestionBox.appendChild(btn);
+        });
+        currentStep++;
+      }
     }
 
     function handleUserInput() {
@@ -171,28 +183,28 @@
       if (expectingWish) {
         response = `Your wish has been recorded: “${input}” 💌 Thank you for your blessings! Deepika and Anand truly appreciate it!`;
         expectingWish = false;
-        updateSuggestions();
-      }” 💌 Thank you for your blessings! Deepika and Anand truly appreciate it!`;
-        expectingWish = false;
-      }” 💌 Thank you for your blessings!`;
-        expectingWish = false;
       } else if (inputLower.includes("congrats") || inputLower.includes("congratulations") || inputLower.includes("happy married") || inputLower.includes("blessing") || inputLower.includes("love") || inputLower.includes("wish")) {
-        response = "Aww, thank you for your lovely wishes! 💕 Anand & Deepika appreciate it!";
+        response = "Aww, thank you for your lovely wishes! 💕 Deepika and Anand appreciate it!";
       } else if (/(hi|hello|hey|namaste)/.test(inputLower)) {
-        response = "Hi there! I’m your wedding assistant 😊 Ask anything about Anand & Deepika's big day!";
+        response = "Hi there! I’m your wedding assistant 😊 Ask anything about Deepika & Anand's big day!";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
         response = "The wedding is on Wednesday, 14th May 2025 at 10:58 A.M. Hope you’ll join us! 💐";
       } else if (inputLower.includes("who") || inputLower.includes("bride") || inputLower.includes("groom")) {
-        response = "It’s Anand and Deepika tying the knot 💍";
+        response = "The bride is Deepika — graceful and cheerful. The groom is Anand — calm and kind-hearted. A perfect pair! 💑";
       } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
         response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.\nFull address: D-45/2/1A, MIDC, Near Lakshmi Narayan Talkies, Bhadravathi Shopping Centre, Old Kumbhari Rd, Solapur, Maharashtra 413006.";
       } else if (inputLower.includes("map") || inputLower.includes("location")) {
         response = "Sure! Here's the venue map 👇";
         document.getElementById("map-container").style.display = "block";
-      } else if (inputLower.includes("wish") || inputLower.includes("message")) {
-        response = "That’s so sweet of you! 💖 Please type your wishes below, and I’ll share them with Deepika and Anand!";
+      } else if (inputLower.includes("wish")) {
+        response = "That’s so sweet of you! 💖 Please type your message now to send your wishes to Deepika and Anand.";
         expectingWish = true;
-        updateSuggestions(['Send the venue map']);
+      } else if (inputLower.includes("attending") || inputLower.includes("join") || inputLower.includes("coming") || inputLower.includes("will come") || inputLower.includes("can’t") || inputLower.includes("cannot")) {
+        if (inputLower.includes("yes") || inputLower.includes("sure") || inputLower.includes("i will")) {
+          response = "Yay! We would love to see you dance at the wedding! See you there! 💃🕺";
+        } else {
+          response = "That’s okay! We’ll miss you. Wishing you the best! 😔";
+        }
       } else {
         response = "I'm not sure how to help with that. You can ask things like ‘Send the venue map’ or ‘Send the wishes’, or contact Deepika for other details. 😊";
       }
@@ -204,33 +216,14 @@
 
       inputField.value = "";
       chatlog.scrollTop = chatlog.scrollHeight;
-    }
-
-    function updateSuggestions(questions = null) {
-      const defaultSuggestions = [
-        'When is the wedding?',
-        'Who is the bride and groom?',
-        'Where is the venue?',
-        'Send me the map',
-        'Send the wishes'
-      ];
-      const suggestionsDiv = document.querySelector('.suggestions');
-      suggestionsDiv.innerHTML = '';
-      (questions || defaultSuggestions.slice(0, 1)).forEach(q => {
-        const btn = document.createElement('button');
-        btn.textContent = q;
-        btn.onclick = () => quickQuestion(q);
-        suggestionsDiv.appendChild(btn);
-      });
+      updateSuggestions();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      updateSuggestions();
       const music = document.getElementById('bgMusic');
       document.body.addEventListener('click', () => {
         if (music && music.paused) music.play().catch(() => {});
       }, { once: true });
     });
-  </script>
-</body>
+  </script></body>
 </html>
