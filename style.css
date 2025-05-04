@@ -1,0 +1,53 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #fff0f5;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.card-container {
+  margin-top: 20px;
+}
+
+.wedding-card {
+  width: 80%;
+  max-width: 500px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.chatbox {
+  margin: 30px auto;
+  width: 90%;
+  max-width: 500px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#chatlog {
+  text-align: left;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 70%;
+  padding: 8px;
+  margin-right: 5px;
+}
+
+button {
+  padding: 8px 12px;
+  background: #ff6f91;
+  border: none;
+  color: white;
+  border-radius: 5px;
+}
+
+.map {
+  margin: 30px 0;
+}
