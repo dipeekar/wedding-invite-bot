@@ -207,17 +207,10 @@
         response = "We’d love to hear your message 💖 Please type your wedding wish below.";
         expectingWish = true;
         currentStep = suggestionSteps.length;
-      }
       } else if (currentStep >= suggestionSteps.length && inputLower.includes("yes")) {
         response = "That’s wonderful to hear! Can’t wait to see you there — hope you bring your best dance moves! 💃🕺";
       } else if (currentStep >= suggestionSteps.length && inputLower.includes("no")) {
         response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
-      }
-        if (inputLower.includes("yes") || inputLower.includes("sure") || inputLower.includes("i will")) {
-          response = "That’s wonderful to hear! Can’t wait to see you there — hope you bring your best dance moves! 💃🕺";
-        } else {
-          response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
-        }
       } else {
         response = "I'm not sure how to help with that. You can ask something like ‘Can you share the Google Map of the venue?’ or ‘Send the wishes’, or you can contact Deepika for more details. 😊";
       }
@@ -229,18 +222,17 @@
 
       inputField.value = "";
       chatlog.scrollTop = chatlog.scrollHeight;
-      if (!expectingWish && !inputLower.includes("attending") && !inputLower.includes("join") && !inputLower.includes("coming") && !inputLower.includes("will come")) {
-        updateSuggestions();
-      }
+      if (!expectingWish) updateSuggestions();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       const chatlog = document.getElementById("chatlog");
       const greeting = document.createElement("div");
       greeting.className = "bot-msg";
-      greeting.textContent = "Welcome 🙏 Let's celebrate the love story of Deepika & Anand together!";
+      greeting.textContent = "Namaskaar 🙏 Welcome to Deepika & Anand's Wedding Chat! Let's celebrate this beautiful journey together.";
       chatlog.appendChild(greeting);
       updateSuggestions();
+
       const music = document.getElementById('bgMusic');
       document.body.addEventListener('click', () => {
         if (music && music.paused) music.play().catch(() => {});
