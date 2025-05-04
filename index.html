@@ -148,11 +148,11 @@
   </audio>
 
   <script>
-    let expectingWishMessage = false;
-    let wishGiven = false;
     let currentStep = 0;
     let rsvpAsked = false;
     let rsvpAnswered = false;
+    let expectingWishMessage = false;
+    let wishGiven = false;
 
     const suggestionSteps = [
       ['Tell me more about the bride and groom'],
@@ -183,17 +183,15 @@
         currentStep++;
       } else if (!rsvpAsked && !rsvpAnswered) {
         rsvpAsked = true;
-        const chatlog = document.getElementById("chatlog");
-        const askRSVP = document.createElement("div");
-        askRSVP.className = "bot-msg";
-        askRSVP.textContent = "Will you be attending the wedding? 😊";
-        chatlog.appendChild(askRSVP);
+        const msg = document.createElement("div");
+        msg.className = "bot-msg";
+        msg.textContent = "Will you be attending the wedding? 😊";
+        document.getElementById("chatlog").appendChild(msg);
       } else if (!wishGiven && !expectingWishMessage) {
-        const chatlog = document.getElementById("chatlog");
-        const askWish = document.createElement("div");
-        askWish.className = "bot-msg";
-        askWish.textContent = "Would you like to send your wishes to Deepika & Anand? 💐";
-        chatlog.appendChild(askWish);
+        const msg = document.createElement("div");
+        msg.className = "bot-msg";
+        msg.textContent = "Would you like to send your wishes to Deepika & Anand? 💐";
+        document.getElementById("chatlog").appendChild(msg);
         expectingWishMessage = true;
       }
     }
@@ -201,8 +199,8 @@
     function handleUserInput(fromButton = false) {
       const inputField = document.getElementById("userInput");
       const input = inputField.value.trim();
-      const chatlog = document.getElementById("chatlog");
       const inputLower = input.toLowerCase();
+      const chatlog = document.getElementById("chatlog");
       if (!input) return;
 
       const userDiv = document.createElement("div");
@@ -211,12 +209,12 @@
       chatlog.appendChild(userDiv);
 
       let response = "";
-      const isWish = wishKeywords.some(keyword => inputLower.includes(keyword));
+      const isWish = wishKeywords.some(k => inputLower.includes(k));
 
       if (expectingWishMessage && !fromButton && !wishGiven) {
         response = `That’s so sweet! 💌 Deepika and Anand truly appreciate your kind words: “${input}”`;
-        expectingWishMessage = false;
         wishGiven = true;
+        expectingWishMessage = false;
       } else if (inputLower.includes("yes") && rsvpAsked && !rsvpAnswered) {
         response = "Yay! We're so happy to hear that. Can't wait to see you dance at the wedding! 💃🕺";
         rsvpAnswered = true;
@@ -232,12 +230,11 @@
       } else if (inputLower.includes("venue") || inputLower.includes("place") || inputLower.includes("address")) {
         response = "Venue: R. R. Dussa Events (Garden), Opp. Laxminarayan Talkies, M.L.D.C., Solapur.";
       } else if (inputLower.includes("map") || inputLower.includes("google")) {
-        response = `Sure! Here's the map location 👇<br><a href="https://maps.app.goo.gl/F8wM1qcQVZPAuhn76" target="_blank">Open in Google Maps</a>`;
+        response = `Here's the map location 👇<br><a href="https://maps.app.goo.gl/F8wM1qcQVZPAuhn76" target="_blank">Open in Google Maps</a>`;
         document.getElementById("map-container").style.display = "block";
       } else if (isWish && !wishGiven) {
         response = `Aww, thank you for your lovely message! 💖 Deepika and Anand truly appreciate it.`;
         wishGiven = true;
-        expectingWishMessage = false;
       } else {
         response = "That’s a lovely message! 😊 Let me know if you want the venue, timing, or to send a wish.";
       }
@@ -254,46 +251,34 @@
     }
 
     function startCountdown(targetDate) {
-      const countdownEl = document.getElementById("countdownTimer");
-
-      function updateCountdown() {
+      const el = document.getElementById("countdownTimer");
+      function update() {
         const now = new Date();
-        const distance = targetDate - now;
-
-        if (distance <= 0) {
-          countdownEl.textContent = "🎊 It's the wedding day! Celebrate love!";
+        const diff = targetDate - now;
+        if (diff <= 0) {
+          el.textContent = "🎊 It's the wedding day! Celebrate love!";
           return;
         }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((distance / (1000 * 60)) % 60);
-        const seconds = Math.floor((distance / 1000) % 60);
-
-        countdownEl.textContent = `⏳ Countdown: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        el.textContent = `⏳ Countdown: ${d}d ${h}h ${m}m ${s}s`;
       }
-
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
+      update();
+      setInterval(update, 1000);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       const chatlog = document.getElementById("chatlog");
-      const greeting = document.createElement("div");
-      greeting.className = "bot-msg";
-      greeting.textContent = "Welcome! 🎊 You’re invited to celebrate the wedding of Deepika & Anand. I’m here to help with all the details!";
-      chatlog.appendChild(greeting);
-
+      chatlog.innerHTML += `<div class="bot-msg">Welcome! 🎊 You’re invited to celebrate the wedding of Deepika & Anand. I’m here to help with all the details!</div>`;
       setTimeout(() => {
-        const followUp = document.createElement("div");
-        followUp.className = "bot-msg";
-        followUp.textContent = "You can ask about the wedding or tap a suggestion below to begin.";
-        chatlog.appendChild(followUp);
+        chatlog.innerHTML += `<div class="bot-msg">You can ask about the wedding or tap a suggestion below to begin.</div>`;
         updateSuggestions();
-      }, 1500);
+      }, 1200);
 
-      const music = document.getElementById('bgMusic');
       document.body.addEventListener('click', () => {
+        const music = document.getElementById("bgMusic");
         if (music && music.paused) music.play().catch(() => {});
       }, { once: true });
 
