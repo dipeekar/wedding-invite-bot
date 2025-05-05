@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,7 +123,13 @@
     <div class="countdown" id="countdownTimer">⏳ Countdown: Loading...</div>
     <div id="chatlog"></div>
 
-    <div class="suggestions" id="suggestions"></div>
+    <div class="suggestions" id="suggestions">
+      <button onclick="quickQuestion('When is the wedding?')">When is the wedding?</button>
+      <button onclick="quickQuestion('Where is the venue?')">Where is the venue?</button>
+      <button onclick="quickQuestion('Can you share the Google Map of the venue?')">Can you share the Google Map of the venue?</button>
+      <button onclick="quickQuestion('Tell me more about the bride and groom')">Tell me more about the bride and groom</button>
+      <button onclick="quickQuestion('I want to send my wishes')">I want to send my wishes</button>
+    </div>
 
     <div class="input-area">
       <input type="text" id="userInput" placeholder="Type your message..." />
@@ -134,18 +142,8 @@
   </audio>
 
   <script>
-    let currentStep = 0;
-    let rsvpAsked = false;
-    let rsvpAnswered = false;
     let expectingWishMessage = false;
     let wishGiven = false;
-
-    const suggestionSteps = [
-      ['Tell me more about the bride and groom'],
-      ['Where is the venue?'],
-      ['Can you share the Google Map of the venue?'],
-      ['I want to send my wishes']
-    ];
 
     const wishKeywords = [
       "congrats", "congratulations", "happy married life", "blessings", "best wishes",
@@ -157,27 +155,10 @@
       handleUserInput(true);
     }
 
-    function updateSuggestions() {
-      const suggestionBox = document.getElementById("suggestions");
-      suggestionBox.innerHTML = "";
-      if (currentStep < suggestionSteps.length) {
-        suggestionSteps[currentStep].forEach(q => {
-          const btn = document.createElement("button");
-          btn.innerText = q;
-          btn.onclick = () => quickQuestion(q);
-          suggestionBox.appendChild(btn);
-        });
-        currentStep++;
-      } else if (!rsvpAsked && !rsvpAnswered) {
-        rsvpAsked = true;
-        const msg = document.createElement("div");
-        msg.className = "bot-msg";
-        msg.textContent = "Will you be attending the wedding? 😊";
-        document.getElementById("chatlog").appendChild(msg);
-      }
-    }
-
-    function handleUserInput(fromButton = false) {
+    
+  function handleUserInput(fromButton = false) {
+    const shouldAskRSVP = !rsvpAsked && !rsvpAnswered && wishGiven;
+  
       const inputField = document.getElementById("userInput");
       const input = inputField.value.trim();
       const inputLower = input.toLowerCase();
@@ -190,18 +171,13 @@
       chatlog.appendChild(userDiv);
 
       let response = "";
+
       const isWish = wishKeywords.some(k => inputLower.includes(k));
 
       if ((expectingWishMessage || inputLower.includes("wish")) && !fromButton && !wishGiven && input.length > 10) {
         response = `That’s so sweet! 💌 Deepika and Anand truly appreciate your kind words: “${input}”`;
         wishGiven = true;
         expectingWishMessage = false;
-      } else if (inputLower.includes("yes") && rsvpAsked && !rsvpAnswered) {
-        response = "Yay! We're so happy to hear that. Bring your best dance moves to the celebration! 💃🕺";
-        rsvpAnswered = true;
-      } else if (inputLower.includes("no") && rsvpAsked && !rsvpAnswered) {
-        response = "Oh no! We’ll miss you at the celebration. Sending love your way. 😔";
-        rsvpAnswered = true;
       } else if (inputLower.includes("thanks") || inputLower.includes("thank you")) {
         response = "You're most welcome! 😊 Let me know if you'd like the venue or timing again.";
       } else if (inputLower.includes("when") || inputLower.includes("date") || inputLower.includes("time")) {
@@ -226,8 +202,13 @@
 
       inputField.value = "";
       chatlog.scrollTop = chatlog.scrollHeight;
-
-      if (!expectingWishMessage && !rsvpAnswered) updateSuggestions();
+    if (shouldAskRSVP) {
+      rsvpAsked = true;
+      const msg = document.createElement("div");
+      msg.className = "bot-msg";
+      msg.textContent = "Will you be attending the wedding? 😊";
+      chatlog.appendChild(msg);
+    }
     }
 
     function startCountdown(targetDate) {
@@ -254,7 +235,6 @@
       chatlog.innerHTML += `<div class="bot-msg">Welcome! 🎊 You’re invited to celebrate the wedding of Deepika & Anand. I’m here to help with all the details!</div>`;
       setTimeout(() => {
         chatlog.innerHTML += `<div class="bot-msg">You can ask about the wedding or tap a suggestion below to begin.</div>`;
-        updateSuggestions();
       }, 1200);
 
       document.body.addEventListener('click', () => {
@@ -264,6 +244,36 @@
 
       startCountdown(new Date("2025-05-14T10:58:00"));
     });
+  
+    let suggestionCount = 0;
+
+    function showRSVP() {
+      const chatlog = document.getElementById("chatlog");
+      const msg = document.createElement("div");
+      msg.className = "bot-msg";
+      msg.textContent = "Will you be attending the wedding? 😊";
+      chatlog.appendChild(msg);
+    }
+
+    function updateSuggestionsIfNeeded() {
+      suggestionCount++;
+      if (suggestionCount === 5) {
+        showRSVP();
+      }
+    }
+
+    const originalQuickQuestion = quickQuestion;
+    quickQuestion = function (text) {
+      originalQuickQuestion(text);
+      updateSuggestionsIfNeeded();
+    };
+
+    const music = document.getElementById("bgMusic");
+    window.addEventListener("click", () => {
+      if (music && music.paused) {
+        music.play().catch(() => {});
+      }
+    }, { once: true });
   </script>
 </body>
 </html>
