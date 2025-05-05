@@ -206,7 +206,7 @@
         response = "Please type your wishes now and I’ll pass them on to the happy couple! 💖";
         expectingWishMessage = true;
       } else {
-        response = "That’s a lovely message! 😊 Let me know if you want the venue, timing, or to send a wish.";
+        response = "That’s a lovely message!Thank you!😊";
       }
 
       const botDiv = document.createElement("div");
@@ -253,7 +253,7 @@
       const chatlog = document.getElementById("chatlog");
       chatlog.innerHTML += `<div class="bot-msg">Welcome! 🎊 You’re invited to celebrate the wedding of Deepika & Anand. I’m here to help with all the details!</div>`;
       setTimeout(() => {
-        chatlog.innerHTML += `<div class="bot-msg">You can ask about the wedding or tap a suggestion below to begin.</div>`;
+        chatlog.innerHTML += `<div class="bot-msg">You can tap a suggestion below to begin.</div>`;
         updateSuggestions();
       }, 1200);
 
